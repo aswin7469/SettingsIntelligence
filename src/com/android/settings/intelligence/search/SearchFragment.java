@@ -157,6 +157,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
             Bundle savedInstanceState) {
         final Activity activity = getActivity();
         final View view = inflater.inflate(R.layout.search_panel, container, false);
+        setResultsContainerPaddingTop(view);
         mResultsRecyclerView = view.findViewById(R.id.list_results);
         mResultsRecyclerView.setAdapter(mSearchAdapter);
         mResultsRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
@@ -375,5 +376,17 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
         final int resultRank = resultViewHolder.getAdapterPosition();
         mMetricsFeatureProvider.logSearchResultClick(result, mQuery, resultType, resultCount,
                 resultRank);
+    }
+
+
+    void setResultsContainerPaddingTop(View view) {
+        final View resultsView = view.findViewById(R.id.results_container);
+
+        final int searchBarHeight = getResources().getDimensionPixelSize(R.dimen.search_bar_height);
+        final int searchBarMargin = getResources().getDimensionPixelSize(R.dimen.search_bar_margin);
+
+        // The top padding is the height of action bar(48dp) + top/bottom margins(16dp)
+        final int paddingTop = searchBarHeight + searchBarMargin * 2;
+        resultsView.setPadding(0 /* left */, paddingTop, 0 /* right */, 0 /* bottom */);
     }
 }
